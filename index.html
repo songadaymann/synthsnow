@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynthSnow - Melt the Snow</title>
+    <style>
+        @font-face {
+            font-family: 'Jacquard';
+            src: url('/assets/Jacquard12-Regular.ttf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a1a;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #three-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Hidden video element for webcam processing */
+        #webcam {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: 1px;
+            height: 1px;
+        }
+
+        /* Full-screen hand tracking overlay */
+        #hand-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        #game-title {
+            font-family: 'Jacquard', serif;
+            font-size: 8rem;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        #start-prompt {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.2em;
+            text-transform: lowercase;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        #start-screen.hidden {
+            display: none;
+        }
+
+        /* Tutorial overlay */
+        #tutorial {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        #tutorial.hidden {
+            display: none;
+        }
+
+        #tutorial-message {
+            font-family: 'Courier New', monospace;
+            font-size: 2.5rem;
+            color: white;
+            text-align: center;
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+            padding: 0 2rem;
+            max-width: 90%;
+            line-height: 1.5;
+            transition: opacity 1s ease-in-out;
+            opacity: 1;
+        }
+
+        #tutorial-message.fade-out {
+            opacity: 0;
+        }
+
+        /* Progress bar */
+        #progress-container {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #progress-container.visible {
+            opacity: 1;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: white;
+            transition: width 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <canvas id="three-canvas"></canvas>
+
+        <!-- Full-screen hand skeleton overlay -->
+        <canvas id="hand-overlay"></canvas>
+
+        <!-- Hidden video element for webcam hand tracking -->
+        <video id="webcam" autoplay playsinline></video>
+
+        <!-- Tutorial overlay -->
+        <div id="tutorial" class="hidden">
+            <div id="tutorial-message"></div>
+        </div>
+
+        <!-- Progress bar -->
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <!-- Start screen overlay -->
+        <div id="start-screen">
+            <div id="game-title">SynthSnow</div>
+            <div id="start-prompt">click / tap to begin</div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
